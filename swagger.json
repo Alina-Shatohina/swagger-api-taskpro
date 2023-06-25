@@ -209,6 +209,70 @@
           }
         }
       }
+    },
+    "/api/boards": {
+      "get": {
+        "tags": ["Boards"],
+        "summary": "Get all user's boards",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Ok (Successful operation)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllBoardsResponse"
+                }
+              }
+            }
+          },
+        
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Boards"],
+        "summary": "Add board",
+        "parameters": [],
+        "requestBody": {
+          "description": "Board's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBoardRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddBoardResponse"
+                }
+              }
+            }
+          },
+        
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+
+
+
     }
 
 
@@ -381,8 +445,117 @@
             "example":"Email in use"
           }
         }
-      }
+      },
+
+        "GetAllBoardsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Board's id",
+                "example": "648f22dda2d8f8537d580812"
+              }, 
+              "title": {
+              "type": "string",
+              "description": "Board's title",
+              "example": "New board"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Icon",
+                "example": "648f22dda2d8f8537d580812sdgdghckj,j,"
+              },
+            "currentBg": {
+              "type": "number",
+              "description": "Board's background color",
+              "example": "121212"
+              },
+              "column": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+            },
+            "owner": {
+              "type": "string",
+              "description": "Owner id",
+              "example": "648f22dda2d8f8537d580812"
+              }
+         
+          }
+        }
+      },
+      "AddBoardRequest": {
+          "type": "object",
+          "required": ["title", "icon", "currentBg"],
+          "properties": {
+              "title": {
+                "type": "string",
+                "description": "Board's title",
+                "example": "My Board"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Icon",
+                "example": ""
+              },
+              "currentBg": {
+                "type": "string",
+                "description": "Background",
+                "example": "121212"
+            }
+          }
+
+        },
+
+        "AddBoardResponse": {
+          "type": "object",
+          "required": ["_id", "title", "icon", "currentBg", "column", "owner"],
+          "properties": {
+               "_id": {
+                "type": "string",
+                "description": "Board's id",
+                "example": "648f22dda2d8f8537d580812"
+              }, 
+              "title": {
+                "type": "string",
+                "description": "Board's title",
+                "example": "My Board"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Icon",
+                "example": "648f22dda2d8f8537d580812sdgdghckj,j,"
+              },
+              "currentBg": {
+                "type": "string",
+                "description": "Background",
+                "example": "Ocean"
+            },
+              "column": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {}
+                }
+            },
+             "owner": {
+              "type": "string",
+              "description": "Owner id",
+              "example": "648f22dda2d8f8537d580812"
+              } 
+
+
+          }
+
+        }
+
+
     },
+    
 
     "securitySchemes": {
       "Bearer": {
@@ -393,5 +566,7 @@
     }
   }
 }
+
+
 
 
