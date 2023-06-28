@@ -431,28 +431,17 @@
       },
       "delete": {
         "tags": ["Columns"],
-        "summary": "Add column",
+        "summary": "Delete column",
         "parameters": [],
-        "requestBody": {
-          "description": "Board's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddColumnRequest"
-              }
-            }
-          }
-        },
         "security": [{ "Bearer": [] }],
 
         "responses": {
-          "201": {
-            "description": "Created",
+          "200": {
+            "description": "Successful removal of a column",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddColumnResponse"
+                  "$ref": "#/components/schemas/DeleteColumnResponse"
                 }
               }
             }
@@ -460,6 +449,16 @@
           "401": {
             "description": "Not authorized",
             "content": {}
+          },
+          "404": {
+            "description": "Column not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnNotFoundResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1062,10 +1061,20 @@
       "ColumnNotFoundResponse": {
         "type": "object",
         "properties": {
-          "title": {
+          "message": {
             "type": "string",
             "description": "Column not found",
             "example": "Column not found"
+          }
+        }
+      },
+      "DeleteColumnResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Successful removal of a column",
+            "example": "Successful removal of a column"
           }
         }
       }
