@@ -7,15 +7,12 @@
     "contact": {
       "name": "Code Ninjas",
       "url": "https://github.com/Titotrapatonni/TaskPro-backend"
-    },
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
     }
+   
   },
-  "consumes": ["application/json"],
+  "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000", "description": "Development" },
+  "servers": [{ "url": "http://localhost:3001", "description": "Development" },
 { "url": "https://task-pro-backend.onrender.com/", "description": "Production" }],
   "tags": [
     {
@@ -319,11 +316,23 @@
         }
       }
     },
+
     "/api/columns": {
       "get": {
         "tags": ["Columns"],
-        "summary": "Get all user board's columns ",
+        "summary": "Get all user board's columns",
         "parameters": [],
+         "requestBody": {
+          "description": "Column's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetAllColumnsRequest"
+              }
+            }
+          }
+        },
         "security": [{ "Bearer": [] }],
 
         "responses": {
@@ -332,7 +341,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetAllBoardsResponse"
+                  "$ref": "#/components/schemas/GetAllColumnsResponse"
                 }
               }
             }
@@ -345,7 +354,7 @@
       },
       "post": {
         "tags": ["Columns"],
-        "summary": "Add board",
+        "summary": "Add column",
         "parameters": [],
         "requestBody": {
           "description": "Board's object",
@@ -353,7 +362,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddBoardRequest"
+                "$ref": "#/components/schemas/AddColumnRequest"
               }
             }
           }
@@ -366,7 +375,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddBoardResponse"
+                  "$ref": "#/components/schemas/AddColumnResponse"
                 }
               }
             }
@@ -378,6 +387,84 @@
         }
       }
     },
+
+     "/api/columns/{id}": {
+      "patch": {
+        "tags": ["Columns"],
+        "summary": "Edit column by id",
+        "parameters": [],
+         "requestBody": {
+          "description": "Column's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditColumnRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditColumnResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Column not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnNotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Columns"],
+        "summary": "Add column",
+        "parameters": [],
+        "requestBody": {
+          "description": "Board's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddColumnRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddColumnResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+
 
 
 
@@ -508,7 +595,7 @@
               },
               "theme": {
                 "type": "string",
-                "description": "User's theme",
+                "description": "Users's theme",
                 "example": "dark"
               }
             }
@@ -568,7 +655,6 @@
             "enum": ["dark", "light", "violet"],
             "example": "dark"
           }
-          
         }
       },
       "ChangeThemeResponse": {
@@ -577,27 +663,24 @@
           "user": {
             "type": "object",
             "properties": {
-          "theme": {
-            "type": "string",
-            "description": "User's theme",
-            "enum": ["dark", "light", "violet"],
-            "example": "dark"
-          }                
-
+              "theme": {
+                "type": "string",
+                "description": "User's theme",
+                "enum": ["dark", "light", "violet"],
+                "example": "dark"
+              }
+            }
           }
-          
         }
-      }
-    },
-    "UploadAvatarRequest": {
+      },
+      "UploadAvatarRequest": {
         "type": "object",
-        
+
         "properties": {
           "file": {
             "type": "string",
             "format": "binary"
           }
-          
         }
       },
       "UploadAvatarResponse": {
@@ -606,21 +689,14 @@
           "success": {
             "type": "boolean"
           },
-            
+
           "avatarURL": {
             "type": "string",
             "description": "User's avatar URL",
             "example": "https://i.pinimg.com/originals/b7/34/e9/b734e9d303af5f13994c12d407862658.png"
-          }                
-                 
+          }
         }
       },
-    
-          
-      
-      
-
-      
 
       "NeedHelpFormRequest": {
         "type": "object",
@@ -675,11 +751,11 @@
           "type": "object",
           "properties": {
             "icon": {
-            "type": "number",
-            "description": "Board's icon",
-            "default":"null",
-            "example": "2"
-          },
+              "type": "number",
+              "description": "Board's icon",
+              "default": null,
+              "example": "2"
+            },
             "_id": {
               "type": "string",
               "description": "Board's id",
@@ -702,35 +778,32 @@
                   "type": "string",
                   "description": "Board's owner id",
                   "example": "648f22dda2d8f8537d582549"
-            },
+                },
                 "name": {
                   "type": "string",
                   "description": "Board's owner name",
                   "example": "Andrew"
-            },
+                },
                 "email": {
                   "type": "string",
                   "description": "Board's owner email",
                   "format": "email",
                   "example": "Andrew@example.com"
-          },
+                },
                 "avatarURL": {
                   "type": "string",
                   "description": "Board's owner avatar URL",
                   "example": "https://i.pinimg.com/originals/b7/34/e9/b734e9d303af5f13994c12d407862658.png"
-          },
+                },
                 "theme": {
                   "type": "string",
                   "description": "Board's theme",
                   "example": "dark"
-            }              
+                }
+              }
             }
-
-           
           }
         }
-      }
-       
       },
       "AddBoardRequest": {
         "type": "object",
@@ -741,15 +814,15 @@
             "description": "Boards's title",
             "example": "New Board"
           },
-           "icon": {
-            "type": "number",
-            "description": "Board's icon",
-            "example": "2"
-          },
           "currentBg": {
             "type": "number",
             "description": "Board's backgound color",
             "example": "2"
+          },
+          "icon": {
+            "type": "number",
+            "description": "Board's icon",
+            "example": "1"
           },
           "owner": {
             "type": "string",
@@ -762,25 +835,25 @@
         "type": "object",
         "required": ["title"],
         "properties": {
-           "_id": {
-              "type": "string",
-              "description": "Board's id",
-              "example": "748f22dda2d8f8537d580812"
-            },
+          "_id": {
+            "type": "string",
+            "description": "Board's id",
+            "example": "984f22GGa2d8f8537d580812"
+          },
           "title": {
             "type": "string",
             "description": "Boards's title",
             "example": "New Board"
           },
-          "icon": {
-            "type": "number",
-            "description": "Board's icon",
-            "example": "2"
-          },
           "currentBg": {
             "type": "number",
             "description": "Board's backgound color",
             "example": "2"
+          },
+          "icon": {
+            "type": "number",
+            "description": "Board's icon",
+            "example": "1"
           },
           "owner": {
             "type": "string",
@@ -788,12 +861,217 @@
             "example": "648f22dda2d8f8537d580812"
           }
         }
+      },
+
+      "GetAllColumnsRequest": {
+        "type": "object",
+        "required": ["parrentBoard"],
+        "properties": {
+          "parrentBoard": {
+            "type": "string",
+            "description": "Columns's owner(board) id",
+            "example": "648f22dda2d8f8537d580812"
+          }
+        }
+      },
+      "GetAllColumnsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Column's id",
+              "example": "648f22dda2d8f8537d580812"
+            },
+            "title": {
+              "type": "string",
+              "description": "Column's title",
+              "example": "New Column"
+            },
+            "parrentBoard": {
+              "type": "string",
+              "description": "Columns's owner(board) id",
+              "example": "125f22dda2d8f8537d536948"
+            },
+
+            "board": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Columns's owner(board) id",
+                  "example": "125f22dda2d8f8537d536948"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Board's title",
+                  "example": "Andrew's board"
+                },
+                "currentBg": {
+                  "type": "number",
+                  "description": "Board's backgound color",
+                  "example": "2"
+                },
+
+                "owner": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Board's owner(user) id",
+                      "example": "648f22dda2d8f8537d582549"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Board's owner name",
+                      "example": "Andrew"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "Board's owner email",
+                      "format": "email",
+                      "example": "Andrew@example.com"
+                    },
+                    "avatarURL": {
+                      "type": "string",
+                      "description": "Board's owner avatar URL",
+                      "example": "https://i.pinimg.com/originals/b7/34/e9/b734e9d303af5f13994c12d407862658.png"
+                    },
+                    "theme": {
+                      "type": "string",
+                      "description": "Board's theme",
+                      "example": "dark"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AddColumnRequest": {
+        "type": "object",
+        "required": ["parrentBoard"],
+        "properties": {
+          "parrentBoard": {
+            "type": "string",
+            "description": "Columns's owner(board) id",
+            "example": "648f22dda2d8f8537d580812"
+          },
+          "title": {
+            "type": "string",
+            "description": "Column's title",
+            "example": "New column"
+          }
+        }
+      },
+
+      "AddColumnResponse": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "description": "Column's id",
+              "example": "648f22dda2d8f8537d580812"
+            },
+            "title": {
+              "type": "string",
+              "description": "Column's title",
+              "example": "New Column"
+            },
+            "parrentBoard": {
+              "type": "string",
+              "description": "Columns's owner(board) id",
+              "example": "125f22dda2d8f8537d536948"
+            },
+
+            "board": {
+              "type": "object",
+              "properties": {
+                "icon": {
+                  "type": "number",
+                  "description": "Board's icon",
+                  "default": null,
+                  "example": "1"
+                },
+
+                "_id": {
+                  "type": "string",
+                  "description": "Columns's owner(board) id",
+                  "example": "125f22dda2d8f8537d536948"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Board's title",
+                  "example": "Andrew's board"
+                },
+                "currentBg": {
+                  "type": "number",
+                  "description": "Board's backgound color",
+                  "default": null,
+                  "example": "2"
+                },
+                "owner": {
+                  "type": "string",
+                  "description": "Board's owner(user) id",
+                  "example": "549f22dda2d8f8537d511111"
+                }
+              }
+            }
+          }
+        
+      },
+
+      "EditColumnRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "New column's title",
+            "example": "New name column"
+          }
+        }
+      },
+
+       "EditColumnResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Columns's id",
+            "example": "355f22dda2d8f8537d536948"
+          },
+          "title": {
+            "type": "string",
+            "description": "New name column",
+            "example": "New name column"
+          },
+          "parrentBoard": {
+            "type": "string",
+            "description": "Columns's owner(board) id",
+            "example": "357f22dda2d8f8537d536948"
+          },
+          "board": {
+            "type": "string",
+            "description": "Columns's owner(board) id",
+            "example": "357f22dda2d8f8537d536948"
+          }
+        }
+      },
+      "ColumnNotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Column not found",
+            "example": "Column not found"
+          }
+        }
       }
-
       
 
-      
-      
+
     },
 
     "securitySchemes": {
@@ -805,3 +1083,6 @@
     }
   }
 }
+
+
+
