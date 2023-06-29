@@ -775,6 +775,11 @@
         "type": "object",
 
         "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzEwNWI0Yzk3NTI4ZTVkYmY1MDNhZSIsImlhdCI6MTY4NTEzNzEyNiwiZXhwIjoxNjg1MjE5OTI2fQ.yTZiezf2_N8N3SLa2pmI-ZRKXy1J9gg2nH-vGwySbqs"
+          },
           "user": {
             "type": "object",
             "properties": {
