@@ -34,8 +34,8 @@
       "description": "Tasks endpoints"
     },
     {
-      "name": "Background",
-      "description": "Background endpoints"
+      "name": "Backgrounds",
+      "description": "Board's background endpoints"
     },
     {
       "name": "Help",
@@ -702,6 +702,32 @@
           }
         }
       }
+    },
+    "/api/backgrounds": {
+      "get": {
+        "tags": ["Backgrounds"],
+        "summary": "Get board's backgrounds",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllBackgroundsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+      
     },
 
     "/api/help/email": {
@@ -1744,6 +1770,46 @@
           }
         }
       },
+      "GetAllBackgroundsResponse": {
+        "type": "array",
+        "items":{
+            "type": "object",
+              "properties": {  
+                  "_id": {
+                    "type": "string",
+                    "description": "Backgound's id",
+                    "example": "548f22dda2d8f8537d580812"
+                  },
+                  "desktopURL": {
+                    "type": "string",
+                    "description": "Backgound desktop url",
+                    "example": "https://res.cloudinary.com/dof7bcg6j/image/upload/v1687433723/DesktopFonts/diego-ph-wyeapf7Gy-U-unsplash_9_dhpf3b.jpg"
+                  },
+                  "retinaURL": {
+                    "type": "string",
+                    "description": "Backgound retina url",
+                    "example": "https://res.cloudinary.com/dof7bcg6j/image/upload/v1687766598/retinaFonts/diego-ph-wyeapf7Gy-U-unsplash_9_hibunu.jpg"
+                  },
+                  "tabletURL": {
+                    "type": "string",
+                    "description": "Backgound tablet url",
+                    "example": "https://res.cloudinary.com/dof7bcg6j/image/upload/v1687433952/TabletFonts/diego-ph-wyeapf7Gy-U-unsplash_17_ezodbf.jpg"
+                  },
+                  "mobileURL": {
+                    "type": "string",
+                    "description": "Backgound mobile url",
+                    "example": "https://res.cloudinary.com/dof7bcg6j/image/upload/v1687434017/MobFonts/diego-ph-wyeapf7Gy-U-unsplash_32_x73ju7.jpg"
+                  },
+                  "previewURL": {
+                    "type": "string",
+                    "description": "Backgound preview url",
+                    "example": "https://res.cloudinary.com/dof7bcg6j/image/upload/v1687942226/DesktopFonts/PRreviewFonts/Vector13_ilcfaz.png"
+                  }
+
+              }
+        }
+       
+      },
       
 
       
@@ -1758,5 +1824,6 @@
     }
   }
 }
+
 
 
