@@ -369,7 +369,7 @@
         "security": [{ "Bearer": [] }],
 
         "responses": {
-          "200": {
+          "204": {
             "description": "Successful removal of a board",
             "content": {
               "application/json": {
@@ -515,7 +515,7 @@
         "security": [{ "Bearer": [] }],
 
         "responses": {
-          "200": {
+          "204": {
             "description": "Successful removal of a column",
             "content": {
               "application/json": {
@@ -676,7 +676,7 @@
         "security": [{ "Bearer": [] }],
 
         "responses": {
-          "200": {
+          "204": {
             "description": "Successful removal of a task",
             "content": {
               "application/json": {
