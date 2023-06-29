@@ -8,12 +8,13 @@
       "name": "Code Ninjas",
       "url": "https://github.com/Titotrapatonni/TaskPro-backend"
     }
-   
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3001", "description": "Development" },
-{ "url": "https://task-pro-backend.onrender.com/", "description": "Production" }],
+  "servers": [
+    { "url": "http://localhost:3001", "description": "Development" },
+    { "url": "https://task-pro-backend.onrender.com/", "description": "Production" }
+  ],
   "tags": [
     {
       "name": "Auth",
@@ -255,8 +256,6 @@
       }
     },
 
-    
-    
     "/api/boards": {
       "get": {
         "tags": ["Boards"],
@@ -317,12 +316,92 @@
       }
     },
 
+    "/api/boards/{id}": {
+      "put": {
+        "tags": ["Boards"],
+        "summary": "Edit board by id",
+        "parameters": [],
+        "requestBody": {
+          "description": "Board's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditBoardRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditBoardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Board not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardNotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Boards"],
+        "summary": "Delete board",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful removal of a board",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteBoardResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Board not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardNotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/api/columns": {
       "get": {
         "tags": ["Columns"],
         "summary": "Get all user board's columns",
         "parameters": [],
-         "requestBody": {
+        "requestBody": {
           "description": "Column's object",
           "required": true,
           "content": {
@@ -387,13 +466,12 @@
         }
       }
     },
-
-     "/api/columns/{id}": {
+    "/api/columns/{id}": {
       "patch": {
         "tags": ["Columns"],
         "summary": "Edit column by id",
         "parameters": [],
-         "requestBody": {
+        "requestBody": {
           "description": "Column's object",
           "required": true,
           "content": {
@@ -464,8 +542,166 @@
       }
     },
 
+    "/api/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get all user's tasks",
+        "parameters": [],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetAllTasksRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
 
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllTasksResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Add task",
+        "parameters": [],
+        "requestBody": {
+          "description": "Task's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTaskRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
 
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddTaskResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/tasks/{id}": {
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Edit task by id",
+        "parameters": [],
+        "requestBody": {
+          "description": "Task's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditTaskRequest"
+              }
+            }
+          }
+        },
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (missing fields)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Task not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskNotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete task",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful removal of a task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTaskResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Task not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskNotFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
 
     "/api/help/email": {
       "post": {
@@ -509,8 +745,6 @@
         }
       }
     }
-
-    
   },
   "components": {
     "schemas": {
@@ -744,6 +978,7 @@
           }
         }
       },
+
       "GetAllBoardsResponse": {
         "type": "array",
         "items": {
@@ -752,8 +987,18 @@
             "icon": {
               "type": "number",
               "description": "Board's icon",
-              "default": null,
-              "example": "2"
+              "enum": [
+                "icon-Project",
+                "icon-hexagon-01",
+                "icon-lightning-02",
+                "icon-loading-03",
+                "icon-star-04",
+                "icon-puzzle-piece-02",
+                "icon-container",
+                "icon-colors"
+              ],
+              "default": "icon-Project",
+              "example": "icon-hexagon-01"
             },
             "_id": {
               "type": "string",
@@ -819,14 +1064,20 @@
             "example": "2"
           },
           "icon": {
-            "type": "number",
-            "description": "Board's icon",
-            "example": "1"
-          },
-          "owner": {
             "type": "string",
-            "description": "Board's owner(user) id",
-            "example": "648f22dda2d8f8537d580812"
+            "description": "Board's icon",
+            "enum": [
+              "icon-Project",
+              "icon-hexagon-01",
+              "icon-lightning-02",
+              "icon-loading-03",
+              "icon-star-04",
+              "icon-puzzle-piece-02",
+              "icon-container",
+              "icon-colors"
+            ],
+            "default": "icon-Project",
+            "example": "icon-hexagon-01"
           }
         }
       },
@@ -850,9 +1101,20 @@
             "example": "2"
           },
           "icon": {
-            "type": "number",
+            "type": "string",
             "description": "Board's icon",
-            "example": "1"
+            "enum": [
+              "icon-Project",
+              "icon-hexagon-01",
+              "icon-lightning-02",
+              "icon-loading-03",
+              "icon-star-04",
+              "icon-puzzle-piece-02",
+              "icon-container",
+              "icon-colors"
+            ],
+            "default": "icon-Project",
+            "example": "icon-hexagon-01"
           },
           "owner": {
             "type": "string",
@@ -861,12 +1123,105 @@
           }
         }
       },
+      "EditBoardRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "New board's title",
+            "example": "New name board"
+          },
+          "currentBg": {
+            "type": "number",
+            "description": "New board's backgound color",
+            "example": "2"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Board's icon",
+            "enum": [
+              "icon-Project",
+              "icon-hexagon-01",
+              "icon-lightning-02",
+              "icon-loading-03",
+              "icon-star-04",
+              "icon-puzzle-piece-02",
+              "icon-container",
+              "icon-colors"
+            ],
+            "default": "icon-Project",
+            "example": "icon-hexagon-01"
+          }
+        }
+      },
+      "EditBoardResponse": {
+        "type": "object",
+        "properties": {
+          "icon": {
+            "type": "string",
+            "description": "Board's icon",
+            "enum": [
+              "icon-Project",
+              "icon-hexagon-01",
+              "icon-lightning-02",
+              "icon-loading-03",
+              "icon-star-04",
+              "icon-puzzle-piece-02",
+              "icon-container",
+              "icon-colors"
+            ],
+            "default": "icon-Project",
+            "example": "icon-hexagon-01"
+          },
+          "_id": {
+            "type": "string",
+            "description": "Board's id",
+            "example": "6499c39b7c5e6e3a44c5e738"
+          },
+          "title": {
+            "type": "string",
+            "description": "New boards's title",
+            "example": "New Board"
+          },
+          "currentBg": {
+            "type": "number",
+            "description": "Board's backgound color",
+            "example": "2"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Board's owner(user) id",
+            "example": "648f22dda2d8f8537d580812"
+          }
+        }
+      },
+      "DeleteBoardResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Successful removal of a board",
+            "example": "Board with id: 648f22dda2d8f8537d580812 deleted"
+          }
+        }
+      },
+
+      "BoardNotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Board not found",
+            "example": "Board with id: 648f22dda2d8f8537d580812 not found"
+          }
+        }
+      },
 
       "GetAllColumnsRequest": {
         "type": "object",
-        "required": ["parrentBoard"],
+        "required": ["parentBoard"],
         "properties": {
-          "parrentBoard": {
+          "parentBoard": {
             "type": "string",
             "description": "Columns's owner(board) id",
             "example": "648f22dda2d8f8537d580812"
@@ -888,7 +1243,7 @@
               "description": "Column's title",
               "example": "New Column"
             },
-            "parrentBoard": {
+            "parentBoard": {
               "type": "string",
               "description": "Columns's owner(board) id",
               "example": "125f22dda2d8f8537d536948"
@@ -951,9 +1306,9 @@
       },
       "AddColumnRequest": {
         "type": "object",
-        "required": ["parrentBoard"],
+        "required": ["parentBoard"],
         "properties": {
-          "parrentBoard": {
+          "parentBoard": {
             "type": "string",
             "description": "Columns's owner(board) id",
             "example": "648f22dda2d8f8537d580812"
@@ -967,6 +1322,131 @@
       },
 
       "AddColumnResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Column's id",
+            "example": "648f22dda2d8f8537d580812"
+          },
+          "title": {
+            "type": "string",
+            "description": "Column's title",
+            "example": "New Column"
+          },
+          "parentBoard": {
+            "type": "string",
+            "description": "Columns's owner(board) id",
+            "example": "125f22dda2d8f8537d536948"
+          },
+
+          "board": {
+            "type": "object",
+            "properties": {
+              "icon": {
+                "type": "number",
+                "description": "Board's icon",
+                "default": null,
+                "example": "1"
+              },
+
+              "_id": {
+                "type": "string",
+                "description": "Columns's owner(board) id",
+                "example": "125f22dda2d8f8537d536948"
+              },
+              "title": {
+                "type": "string",
+                "description": "Board's title",
+                "example": "Andrew's board"
+              },
+              "currentBg": {
+                "type": "number",
+                "description": "Board's backgound color",
+                "default": null,
+                "example": "2"
+              },
+              "owner": {
+                "type": "string",
+                "description": "Board's owner(user) id",
+                "example": "549f22dda2d8f8537d511111"
+              }
+            }
+          }
+        }
+      },
+      "EditColumnRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "New column's title",
+            "example": "New name column"
+          }
+        }
+      },
+      "EditColumnResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Column's id",
+            "example": "648f22dda2d8f8537d580812"
+          },
+          "title": {
+            "type": "string",
+            "description": "Column's new title",
+            "example": "New name column"
+          },
+          "parentBoard": {
+            "type": "string",
+            "description": "Columns's owner(board) id",
+            "example": "125f22dda2d8f8537d536948"
+          },
+          "board": {
+            "type": "string",
+            "description": "Columns's owner(board) id",
+            "example": "125f22dda2d8f8537d536948"
+          }
+        }
+      },
+
+      "ColumnNotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Column not found",
+            "example": "Column not found"
+          }
+        }
+      },
+
+      "DeleteColumnResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Successful removal of a column",
+            "example": "Successful removal of a column"
+          }
+        }
+      },
+      "GetAllTasksRequest": {
+        "type": "object",
+        "required": ["parentColumn"],
+        "properties": {
+          "parentColumn": {
+            "type": "string",
+            "description": "Tasks's owner(column) id",
+            "example": "648f22dda2d8f8537d580812"
+          }
+        }
+      },
+
+      "GetAllTasksResponse": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
             "_id": {
@@ -979,119 +1459,298 @@
               "description": "Column's title",
               "example": "New Column"
             },
-            "parrentBoard": {
+            "parentColumn": {
               "type": "string",
-              "description": "Columns's owner(board) id",
+              "description": "Task's owner(column) id",
               "example": "125f22dda2d8f8537d536948"
             },
+            "priority": {
+              "type": "string",
+              "description": "Task's priority",
+              "enum": ["without", "low", "medium", "high"],
+              "example": "medium"
+            },
+            "description": {
+              "type": "string",
+              "description": "Task's description",
+              "example": "My task's description"
+            },
 
-            "board": {
+            "column": {
               "type": "object",
               "properties": {
-                "icon": {
-                  "type": "number",
-                  "description": "Board's icon",
-                  "default": null,
-                  "example": "1"
-                },
-
                 "_id": {
                   "type": "string",
-                  "description": "Columns's owner(board) id",
+                  "description": "Columns's id",
                   "example": "125f22dda2d8f8537d536948"
                 },
                 "title": {
                   "type": "string",
-                  "description": "Board's title",
-                  "example": "Andrew's board"
+                  "description": "Column's title",
+                  "example": "Andrew's column"
                 },
-                "currentBg": {
-                  "type": "number",
-                  "description": "Board's backgound color",
-                  "default": null,
-                  "example": "2"
-                },
-                "owner": {
-                  "type": "string",
-                  "description": "Board's owner(user) id",
-                  "example": "549f22dda2d8f8537d511111"
+
+                "board": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "description": "Board's id",
+                      "example": "478f22dda2d8f8537d11111"
+                    },
+                    "title": {
+                      "type": "string",
+                      "description": "Board's title",
+                      "example": "Andrew's board"
+                    },
+                    "currentBg": {
+                      "type": "number",
+                      "description": "Board's backgound color",
+                      "default": null,
+                      "example": "2"
+                    },
+
+                    "owner": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "description": "Board's owner(user) id",
+                          "example": "648f22dda2d8f8537d582549"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Board's owner name",
+                          "example": "Andrew"
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "Board's owner email",
+                          "format": "email",
+                          "example": "Andrew@example.com"
+                        },
+                        "avatarURL": {
+                          "type": "string",
+                          "description": "Board's owner avatar URL",
+                          "example": "https://i.pinimg.com/originals/b7/34/e9/b734e9d303af5f13994c12d407862658.png"
+                        },
+                        "theme": {
+                          "type": "string",
+                          "description": "Board's theme",
+                          "example": "dark"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
           }
-        
+        }
       },
 
-      "EditColumnRequest": {
+      "AddTaskRequest": {
         "type": "object",
+        "required": ["title"],
         "properties": {
           "title": {
             "type": "string",
-            "description": "New column's title",
-            "example": "New name column"
+            "description": "Task's title",
+            "example": "New task"
+          },
+          "parentColumn": {
+            "type": "string",
+            "description": "Task's owner(column) id",
+            "example": "648f22dda2d8f8537d580812"
+          },
+          "description": {
+            "type": "string",
+            "description": "Task's description",
+            "example": "My task's description"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Task's priority",
+            "enum": ["without", "low", "medium", "high"],
+            "default": "medium",
+            "example": "low"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date",
+            "description": "Task's deadline"
           }
         }
       },
 
-       "EditColumnResponse": {
+      "AddTaskResponse": {
         "type": "object",
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Columns's id",
-            "example": "355f22dda2d8f8537d536948"
+            "description": "Task's id",
+            "example": "648f22dda2d8f8537d580812"
           },
           "title": {
             "type": "string",
-            "description": "New name column",
-            "example": "New name column"
+            "description": "Task's title",
+            "example": "New task"
           },
-          "parrentBoard": {
+          "parentColumn": {
             "type": "string",
-            "description": "Columns's owner(board) id",
-            "example": "357f22dda2d8f8537d536948"
+            "description": "Task's owner(column) id",
+            "example": "125f22dda2d8f8537d536948"
           },
-          "board": {
+          "description": {
             "type": "string",
-            "description": "Columns's owner(board) id",
-            "example": "357f22dda2d8f8537d536948"
+            "description": "Task's description",
+            "example": "My task's description"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Task's priority",
+            "enum": ["without", "low", "medium", "high"],
+            "default": "medium",
+            "example": "low"
+          },
+
+          "column": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Task's owner(column) id",
+                "example": "125f22dda2d8f8537d536948"
+              },
+              "title": {
+                "type": "string",
+                "description": "Column's title",
+                "example": "Andrew's column"
+              },
+              "parentBoard": {
+                "type": "string",
+                "description": "Column's owner(board) id",
+                "example": "565f22dda2d8f8537d987456"
+              },
+              "board": {
+                "type": "string",
+                "description": "Column's owner(board) id",
+                "example": "565f22dda2d8f8537d987456"
+              }
+            }
           }
         }
       },
-      "ColumnNotFoundResponse": {
+
+      "EditTaskRequest": {
+        "type": "object",
+        "required": ["title", "description", "priority", "deadline"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Task's title",
+            "example": "New task"
+          },
+          "description": {
+            "type": "string",
+            "description": "Task's description",
+            "example": "My task's description"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Task's priority",
+            "enum": ["without", "low", "medium", "high"],
+            "default": "medium",
+            "example": "low"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date",
+            "description": "Task's deadline",
+            "example": "01-07-2023"
+          }
+        }
+      },
+
+      "EditTaskResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Task's id",
+            "example": "648f22dda2d8f8537d580812"
+          },
+          "title": {
+            "type": "string",
+            "description": "Task's title",
+            "example": "New task"
+          },
+          "parentColumn": {
+            "type": "string",
+            "description": "Task's owner(column) id",
+            "example": "125f22dda2d8f8537d536948"
+          },
+          "description": {
+            "type": "string",
+            "description": "Task's description",
+            "example": "My task's description"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Task's priority",
+            "enum": ["without", "low", "medium", "high"],
+            "default": "medium",
+            "example": "low"
+          },
+          "column": {
+            "type": "string",
+            "description": "Task's owner(column) id",
+            "example": "125f22dda2d8f8537d536948"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date",
+            "description": "Task's deadline",
+            "example": "01-07-2023"
+          }
+
+         
+        }
+      },
+
+      "TaskNotFoundResponse": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
-            "description": "Column not found",
-            "example": "Column not found"
+            "description": "Task not found",
+            "example": "Task not found"
           }
         }
       },
-      "DeleteColumnResponse": {
+      "DeleteTaskResponse": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
-            "description": "Successful removal of a column",
-            "example": "Successful removal of a column"
+            "description": "Successful removal of a task",
+            "example": "task deleted"
           }
         }
-      }
+      },
       
 
+      
 
-    },
-
-    "securitySchemes": {
-      "Bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
       }
     }
   }
 }
-
 
 
